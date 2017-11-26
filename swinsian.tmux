@@ -4,12 +4,17 @@ CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 source "$CURRENT_DIR/scripts/helpers.sh"
 
-swinsian_interpolation=(
-	"\#{swinsian_status}"
+cpu_interpolation=(
+	"\#{cpu_percentage}"
+	"\#{cpu_icon}"
+	"\#{cpu_bg_color}"
+	"\#{cpu_fg_color}"
 )
-
-swinsian_commands=(
-	"#($CURRENT_DIR/scripts/status.sh)"
+cpu_commands=(
+	"#($CURRENT_DIR/scripts/cpu_percentage.sh)"
+	"#($CURRENT_DIR/scripts/cpu_icon.sh)"
+	"#($CURRENT_DIR/scripts/cpu_bg_color.sh)"
+	"#($CURRENT_DIR/scripts/cpu_fg_color.sh)"
 )
 
 set_tmux_option() {
@@ -20,11 +25,9 @@ set_tmux_option() {
 
 do_interpolation() {
 	local all_interpolated="$1"
-
 	for ((i=0; i<${#cpu_commands[@]}; i++)); do
-		all_interpolated=${all_interpolated/${swinsian_interpolation[$i]}/${swinsian_commands[$i]}}
+		all_interpolated=${all_interpolated/${cpu_interpolation[$i]}/${cpu_commands[$i]}}
 	done
-
 	echo "$all_interpolated"
 }
 
@@ -39,5 +42,4 @@ main() {
 	update_tmux_option "status-right"
 	update_tmux_option "status-left"
 }
-
 main
